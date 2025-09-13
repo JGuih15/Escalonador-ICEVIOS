@@ -71,6 +71,9 @@ public class gerenciamento {
         return null;
     }
 
+    public Node removerDCeRetornar(){
+
+    }
 
 
 
