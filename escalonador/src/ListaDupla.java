@@ -9,8 +9,8 @@ public class ListaDupla {
         tamanho = 0;
     }
     //DC = duplamente encadeada
-    public void addFinalDC(int valor) {
-        NoDuplo novoDC = new NoDuplo();
+    public void addFinalDC(Processos p) {
+        NoDuplo novoDC = new NoDuplo(p);
         if (head == null) { // Lista vazia
             head = novoDC;
             tail = novoDC;
@@ -38,21 +38,38 @@ public class ListaDupla {
         removido.anterior = null;
         return removido;
     }
-    public Processos removerERetornarRemovido (Processos processos) {
-        NoDuplo atual = (NoDuplo) head;
 
-        while (atual != null && !atual.processos.equals(processos)) {
+    public Processos removerParaOutraLista(int id, gerenciamento listaDestino) {
+        NoDuplo atual = (NoDuplo) head;
+        while (atual != null) {
+            if (atual.processos.getId() == id) {
+                // Ajusta ponteiros para não quebrar a lista
+                if (atual.anterior != null)
+                    atual.anterior.proximo = atual.proximo;
+                else
+                    head = atual.proximo; // removendo o primeiro
+
+                if (atual.proximo != null)
+                    atual.proximo.anterior = atual.anterior;
+                else
+                    tail = atual.anterior; // removendo o último
+                tamanho--;
+                // Adiciona o processo removido na lista de destino(gerenciamento)
+                listaDestino.adUltimo(atual.processos);
+
+                return atual.processos; // retorna o processo removido
+            }
             atual = atual.proximo;
         }
-
-        if (atual == null) {
-            return null; // Não encontrado
+        return null; // não encontrado
+    }
+    public void listarDC() {
+        NoDuplo atual = (NoDuplo) head;
+        while (atual != null) {
+            System.out.println(atual.processos);
+            atual = atual.proximo;
+            System.out.println("TAMANHO: " + tamanho);
         }
-        
-        Processos dadoRemovido = atual.processos;
-        
-        removerInicioDC(atual);
-        return dadoRemovido;
     }
 
 

@@ -8,7 +8,7 @@ public class Listacircular {
         this.tamanho=0;
     }
     public void addProcessoLC(Processos processo) {
-        Node novoNo = new Node(processo);
+        Node novoNo = new Node();
         if (atual == null) {
             atual = novoNo;
             novoNo.next = atual;
@@ -23,12 +23,12 @@ public class Listacircular {
         }
         tamanho++;
     }
-    public void removerProcessoLC(Processos processo) {
-        if  (atual == null) return;
+    public Object removerProcessoLC(Processos processos) {
+        if  (atual == null) return null;
 
         else if (atual.next == cabeca) {
-            atual.next = atual.next.next;
-            return;
+            processos = atual.processos;
+            return null;
         }else{
             Node temp = cabeca;
             while (temp.next != atual) {
@@ -38,11 +38,6 @@ public class Listacircular {
             cabeca = temp.next;
         }
         tamanho--;
+        return null;
     }
-    public void removerUltimoProcessoLC(Processos processo) {
-        if  (atual == null) return;
-        else  if (atual.next == cabeca) {}
-
-    }
-
 }
