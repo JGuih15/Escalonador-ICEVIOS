@@ -1,4 +1,4 @@
-public class Prioridade {
+public class prioridade {
     private gerenciamento altaPrioridade  = new gerenciamento();
     private gerenciamento mediaPrioridade = new gerenciamento();
     private gerenciamento baixaPrioridade = new gerenciamento();

@@ -2,6 +2,7 @@ public class gerenciamento {
     private Processos processo;
     private Node cabeca=null ;
     private Node tail=null;
+    int size= 0;
 
     //funcao de verificacao de preenchimento das listas.
     public boolean isEmpty(){
@@ -23,6 +24,7 @@ public class gerenciamento {
         else{
            novo.next=atual;
            cabeca=novo;
+           size ++;//aumenta o tamnho da lista apos adicao.
 
         }
     }
@@ -39,6 +41,7 @@ public class gerenciamento {
                 atual.next=cabeca;
             }
             atual.next=novo;
+            size++;
 
         }
 
@@ -52,6 +55,7 @@ public class gerenciamento {
         }
 
         cabeca=cabeca.next;
+        size--;
         return true;
     }
 
@@ -65,9 +69,11 @@ public class gerenciamento {
             atual=atual.next;
         }
         atual.next=null;
+        size--;
 
         return null;
     }
+
     //funcao para remover o primeiro Node
     public Processos removerPrimeiro(){
         if (isEmpty()) {
@@ -75,8 +81,10 @@ public class gerenciamento {
             return null;
         }else{
             cabeca=cabeca.next;
+            size--;//reduz o tamanho da lista apos a remocao do elemento.
             return null;
         }
+
     }
 
 
