@@ -8,7 +8,8 @@ public class Listacircular {
         this.tamanho=0;
     }
     public void addProcessoLC(Processos processo) {
-        Node novoNo = new Node(processo);
+        Node novoNo = new Node();
+        novoNo.criacao(processo);//chamando a função de criação,onde as informações do processo sao adicionadas.
         if (atual == null) {
             atual = novoNo;
             novoNo.next = atual;
@@ -24,10 +25,13 @@ public class Listacircular {
         tamanho++;
     }
     public void removerProcessoLC(Processos processo) {
-        if  (atual == null) return null;
+
+        if  (atual == null){
+            return null;
+        }//faltou os parenteses.
 
         else if (atual.next == cabeca) {
-            processo = atual.processo;
+            processo = atual.processo;//como assim?
             return null;
         }else{
             Node temp = cabeca;
