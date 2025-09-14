@@ -3,9 +3,9 @@ public class NoDuplo extends Node {
     NoDuplo proximo;
     NoDuplo anterior;
 
-    public NoDuplo() {
+    public NoDuplo(Processos p) {
         super();
-        this.processos = processos;
+        this.processos = p;
         this.proximo = null;
         this.anterior = null;
     }

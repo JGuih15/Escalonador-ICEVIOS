@@ -9,8 +9,8 @@ public class ListaDupla {
         tamanho = 0;
     }
     //DC = duplamente encadeada
-    public void addFinalDC(int valor) {
-        NoDuplo novoDC = new NoDuplo();
+    public void addFinalDC(Processos p) {
+        NoDuplo novoDC = new NoDuplo(p);
         if (head == null) { // Lista vazia
             head = novoDC;
             tail = novoDC;
@@ -54,6 +54,29 @@ public class ListaDupla {
         removerInicioDC(atual);
         return dadoRemovido;
     }
+    public Processos removerParaOutraLista(int id, gerenciamento listaDestino) {
+        NoDuplo atual = (NoDuplo) head;
+        while (atual != null) {
+            if (atual.processos.getId() == id) {
+                // Ajusta ponteiros para não quebrar a lista
+                if (atual.anterior != null)
+                    atual.anterior.proximo = atual.proximo;
+                else
+                    head = atual.proximo; // removendo o primeiro
 
+                if (atual.proximo != null)
+                    atual.proximo.anterior = atual.anterior;
+                else
+                    tail = atual.anterior; // removendo o último
+                tamanho--;
+                // Adiciona o processo removido na lista de destino(gerenciamento)
+                listaDestino.adUltimo(atual.processos);
+
+                return atual.processos; // retorna o processo removido
+            }
+            atual = atual.proximo;
+        }
+        return null; // não encontrado
+    }
 
 }
