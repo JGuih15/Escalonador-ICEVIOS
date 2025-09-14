@@ -1,6 +1,7 @@
 public class gerenciamento {
     private Processos processo;
     private Node cabeca=null ;
+    private Node tail=null;
 
     //funcao de verificacao de preenchimento das listas.
     public boolean isEmpty(){
@@ -13,16 +14,19 @@ public class gerenciamento {
     //funcao para adicionar um no na primeira posicao.
     public void adicionarNO(){
         Node novo= new Node();
+        Node atual=cabeca;
         novo.criacao(processo);
         if(isEmpty()){
             cabeca=novo;
 
         }
         else{
-            novo.next=cabeca;
-            cabeca=novo.next;
+           novo.next=atual;
+           cabeca=novo;
+
         }
     }
+
     //funcao para adicionar na ultima posicao da lista
     public void adUltimo(){
         Node novo= new Node();
@@ -30,9 +34,9 @@ public class gerenciamento {
         if(isEmpty()){
             novo=cabeca;
         }else{
-            Node atual= cabeca;
-            while(atual.next!=cabeca){
-                atual=atual.next;
+            Node atual=cabeca;
+            while(atual.next!=null){
+                atual.next=cabeca;
             }
             atual.next=novo;
 
@@ -46,6 +50,7 @@ public class gerenciamento {
             System.out.println("a lista esta vazia");
             return false ;
         }
+
         cabeca=cabeca.next;
         return true;
     }
@@ -63,12 +68,15 @@ public class gerenciamento {
 
         return null;
     }
+    //funcao para remover o primeiro Node
     public Processos removerPrimeiro(){
         if (isEmpty()) {
             System.out.println("a lista esta vazia");
             return null;
-        }else cabeca=cabeca.next;
-        return null;
+        }else{
+            cabeca=cabeca.next;
+            return null;
+        }
     }
 
 
