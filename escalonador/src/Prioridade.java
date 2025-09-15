@@ -1,31 +1,36 @@
 public class prioridade {
-    private gerenciamento altaPrioridade  = new gerenciamento();
+    private gerenciamento altaPrioridade = new gerenciamento();
     private gerenciamento mediaPrioridade = new gerenciamento();
     private gerenciamento baixaPrioridade = new gerenciamento();
     private gerenciamento bloqueados = new gerenciamento();
-
     private int contadorCiclos = 0;
 
-    //add cada processo em sua respectiva prioridade:
     public void inserirNaLista(Processos proc){
         if(proc.getPrioridade() == 1){
-            altaPrioridade.adUltimo(atual.processos);
-        }else if(proc.getPrioridade() == 2){
-            mediaPrioridade.adUltimo(atual.processos);
-        }else {
-            baixaPrioridade.adUltimo(atual.processos);
+            altaPrioridade.adUltimo(proc);
+        } else if(proc.getPrioridade() == 2){
+            mediaPrioridade.adUltimo(proc);
+        } else {
+            baixaPrioridade.adUltimo(proc);
         }
     }
-    //contador de ciclos da CPU, para que não seja executado apenas processos de prioridade 1
+
     public void executarCiclo(){
         Processos desbloqueados = bloqueados.removerPrimeiro();
         if(desbloqueados != null){
-            System.out.println("Processo" + desbloqueados.getNome()+ "desbloqueado");
-
+            System.out.println("Processo " + desbloqueados.getNome() + " desbloqueado");
+            inserirNaLista(desbloqueados);
         }
 
+        Processos p = altaPrioridade.removerPrimeiro();
+        if(p == null) p = mediaPrioridade.removerPrimeiro();
+        if(p == null) p = baixaPrioridade.removerPrimeiro();
 
-
+        if(p != null){
+            System.out.println("Executando processo " + p.getNome());
+            contadorCiclos++;
+        } else {
+            System.out.println("Nenhum processo para executar neste ciclo.");
+        }
     }
-
 }
