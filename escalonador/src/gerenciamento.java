@@ -1,94 +1,70 @@
 public class gerenciamento {
     private Processos processo;
-    private Node cabeca=null ;
-    private Node tail=null;
-    int size= 0;
+    private Node cabeca = null;
+    private Node tail = null;
+    int size = 0;
 
-    //funcao de verificacao de preenchimento das listas.
     public boolean isEmpty(){
-        if(this.cabeca==null){
-            return true;
-        }
-        return false;
+        return cabeca == null;
     }
 
-    //funcao para adicionar um no na primeira posicao.
-    public  void  adicionarNO(){
-        Node novo= new Node();
-        Node atual=cabeca;
-        novo.criacao(processo);
+    public void adicionarNO(Processos processos){
+        Node novo = new Node();
+        novo.criacao(processos);
         if(isEmpty()){
-            cabeca=novo;
-
+            cabeca = novo;
+        } else {
+            novo.next = cabeca;
+            cabeca = novo;
         }
-        else{
-           novo.next=atual;
-           cabeca=novo;
-           size ++;//aumenta o tamnho da lista apos adicao.
-
-        }
+        size++;
     }
 
-    //funcao para adicionar na ultima posicao da lista
     public void adUltimo(Processos processos){
-        Node novo= new Node();
-        novo.criacao(processo);
+        Node novo = new Node();
+        novo.criacao(processos);
         if(isEmpty()){
-            novo=cabeca;
-        }else{
-            Node atual=cabeca;
-            while(atual.next!=null){
-                atual.next=cabeca;
+            cabeca = novo;
+        } else {
+            Node atual = cabeca;
+            while(atual.next != null){
+                atual = atual.next;
             }
-            atual.next=novo;
-            size++;
-
+            atual.next = novo;
         }
-
+        size++;
     }
 
-    //funcao para remover um NO na primeira posicao.
-    public boolean remover(){
-        if(isEmpty()){
-            System.out.println("a lista esta vazia");
-            return false ;
-        }else{
-        cabeca=cabeca.next;
-        size--;
-        return true;
-        }
-    }
-
-    //funcao para remover um no na ultima posicao.
-    public Processos removerUltima(){
-        if (isEmpty()) {
-
-        }
-        Node atual=cabeca;
-        while(atual.next.next!=null){
-            atual=atual.next;
-        }
-        atual.next=null;
-        size--;
-
-        return null;
-    }
-
-    //funcao para remover o primeiro Node
     public Processos removerPrimeiro(){
-        if (isEmpty()) {
-            System.out.println("a lista esta vazia");
+        if(isEmpty()){
+            System.out.println("A lista está vazia");
             return null;
-        }else{
-            cabeca=cabeca.next;
-            size--;//reduz o tamanho da lista apos a remocao do elemento.
-            return null;
+        } else {
+            Processos removido = cabeca.processo;
+            cabeca = cabeca.next;
+            size--;
+            return removido;
         }
-
     }
 
-
-
-
-
+    public Processos removerUltima(){
+        if(isEmpty()){
+            System.out.println("A lista está vazia");
+            return null;
+        } else if(cabeca.next == null){
+            Processos removido = cabeca.processo;
+            cabeca = null;
+            size--;
+            return removido;
+        } else {
+            Node atual = cabeca;
+            while(atual.next.next != null){
+                atual = atual.next;
+            }
+            Processos removido = atual.next.processo;
+            atual.next = null;
+            size--;
+            return removido;
+        }
+    }
 }
