@@ -65,7 +65,7 @@ public class LeitordeDados{
                         ciclos=1;
                     }
 
-                    processo[indice]= new Processos();//os dados devem ser inseridos aqui,mas ainda nao sei como.
+                    processo[indice]= new Processos(nome,prioridade,id,ciclos,recurso);//os dados devem ser inseridos aqui,mas ainda nao sei como.
                     indice++;
 
                 }else{

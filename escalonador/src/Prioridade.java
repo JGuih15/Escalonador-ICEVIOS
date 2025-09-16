@@ -1,9 +1,22 @@
-public class prioridade {
+public class Prioridade {
     private gerenciamento altaPrioridade = new gerenciamento();
     private gerenciamento mediaPrioridade = new gerenciamento();
     private gerenciamento baixaPrioridade = new gerenciamento();
     private gerenciamento bloqueados = new gerenciamento();
     private int contadorCiclos = 0;
+
+    public gerenciamento getAltaPrioridade() {return altaPrioridade;}
+    public void setAltaPrioridade(gerenciamento altaPrioridade) {this.altaPrioridade = altaPrioridade;}
+
+    public gerenciamento getMediaPrioridade() {return mediaPrioridade;}
+    public void setMediaPrioridade(gerenciamento mediaPrioridade) {this.mediaPrioridade = mediaPrioridade;}
+
+    public gerenciamento getBaixaPrioridade() {return baixaPrioridade;}
+    public void setBaixaPrioridade(gerenciamento baixaPrioridade) {this.baixaPrioridade = baixaPrioridade;}
+
+    public gerenciamento getBloqueados() {return bloqueados;}
+    public void setBloqueados(gerenciamento bloqueados) {this.bloqueados = bloqueados;}
+
 
     public void inserirNaLista(Processos proc){
         if(proc.getPrioridade() == 1){

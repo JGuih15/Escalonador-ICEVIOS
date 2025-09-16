@@ -3,11 +3,11 @@ public class Processos {
     private int id;
     private int prioridade;
     private int ciclos;
-    private int recursos;
+    private String recursos;
     private boolean bloqueado;
 
 
-    public Processos(String nome,int prioridade,int id, int ciclos,int recursos){
+    public Processos(String nome, int prioridade, int id, int ciclos, String recursos){
         this.nome=nome;
         this.prioridade=prioridade;
         this.id=id;
@@ -28,10 +28,23 @@ public class Processos {
     public int getCiclos() { return ciclos;}
     public void setCiclos(int ciclos) {this.ciclos = ciclos;}
 
-    public int getRecursos() {return recursos;}
-    public void setRecursos(int recursos) {this.recursos = recursos;}
+    public String getRecursos() {return recursos;}
+    public void setRecursos(String recursos) {this.recursos = recursos;}
 
     public boolean isBloqueado() {return bloqueado;}
     public void setBloqueado(boolean bloqueados) {this.bloqueado = bloqueados;}
+
+
+    @Override
+    public String toString() {
+        return "Processo{" +
+                "nome='" + nome + '\'' +
+                ", prioridade=" + prioridade +
+                ", id=" + id +
+                ", ciclos=" + ciclos +
+                ", recursos=" + recursos +
+                '}';
+    }
+
 }
 

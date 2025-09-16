@@ -1,7 +1,6 @@
 public class gerenciamento {
     private Processos processo;
     private Node cabeca = null;
-    private Node tail = null;
     int size = 0;
 
     public boolean isEmpty(){
@@ -40,10 +39,9 @@ public class gerenciamento {
             System.out.println("A lista está vazia");
             return null;
         } else {
-            Processos removido = cabeca.processo;
-            cabeca = cabeca.next;
-            size--;
-            return removido;
+           cabeca=cabeca.next;
+           size--;
+            return null;
         }
     }
 
@@ -52,19 +50,30 @@ public class gerenciamento {
             System.out.println("A lista está vazia");
             return null;
         } else if(cabeca.next == null){
-            Processos removido = cabeca.processo;
-            cabeca = null;
-            size--;
-            return removido;
+            cabeca=null;
+            return null;
         } else {
             Node atual = cabeca;
             while(atual.next.next != null){
                 atual = atual.next;
             }
-            Processos removido = atual.next.processo;
             atual.next = null;
             size--;
-            return removido;
+            return null;
         }
+    }
+
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        NoDuplo atual = cabeca;
+
+        while (atual != null) {
+            sb.append(atual.getProcesso().toString()).append("\n");
+            atual = atual.getProximo();
+        }
+
+        return sb.toString();
     }
 }
