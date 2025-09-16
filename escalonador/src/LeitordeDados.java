@@ -46,14 +46,12 @@ public class LeitordeDados{
 
                     //recursos "opcionais".
                     String recurso=null;
-                    if(dados.length>4){
+                    if(dados.length > 4){
                         recurso=dados[4];
 
                         if(recurso.equals("null")){
                             recurso=null;
                         }
-
-
                     }
                     //validacao e sepracao por prioridade.
                     if(prioridade<1||prioridade>3){

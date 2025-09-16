@@ -14,4 +14,15 @@ public class NoDuplo extends Node {
     public String toString() {
         return processos.toString();
     }
+
+    public Boolean getProcesso() {
+
+        this.processos=processos;
+        return true;
+    }
+
+    public NoDuplo getProximo() {
+        this.processos=processos;
+        return null;
+    }
 }

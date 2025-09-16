@@ -1,6 +1,6 @@
 public class gerenciamento {
     private Processos processo;
-    private Node cabeca = null;
+    private NoDuplo cabeca = null;
     int size = 0;
 
     public boolean isEmpty(){
@@ -8,8 +8,7 @@ public class gerenciamento {
     }
 
     public void adicionarNO(Processos processos){
-        Node novo = new Node();
-        novo.criacao(processos);
+        NoDuplo novo = new NoDuplo(processos);
         if(isEmpty()){
             cabeca = novo;
         } else {
@@ -20,7 +19,7 @@ public class gerenciamento {
     }
 
     public void adUltimo(Processos processos){
-        Node novo = new Node();
+        NoDuplo novo = new NoDuplo(processos);
         novo.criacao(processos);
         if(isEmpty()){
             cabeca = novo;
@@ -39,7 +38,7 @@ public class gerenciamento {
             System.out.println("A lista está vazia");
             return null;
         } else {
-           cabeca=cabeca.next;
+           cabeca= (NoDuplo) cabeca.next;
            size--;
             return null;
         }
