@@ -3,23 +3,22 @@
 # Prioridade: 1=Alta, 2=Média, 3=Baixa
 # Recurso: use "null" se não houver recurso específico
 
-# Processos de alta prioridade (1)
+
 ProcessoA 1 101 5 CPU
 ProcessoB 1 102 3 null
 ProcessoC 1 103 8 Memoria
 
-# Processos de média prioridade (2)
+
 ProcessoD 2 201 4 Disco
 ProcessoE 2 202 6 null
 ProcessoF 2 203 2 Rede
 
-# Processos de baixa prioridade (3)
 ProcessoG 3 301 10 null
 ProcessoH 3 302 7 CPU
 ProcessoI 3 303 4 Impressora
 ProcessoJ 3 304 12 null
 
-# Processos adicionais para teste
+
 SistemaInit 1 001 1 null
 BackgroundTask 3 401 15 Disco
 UserApp 2 501 8 Memoria

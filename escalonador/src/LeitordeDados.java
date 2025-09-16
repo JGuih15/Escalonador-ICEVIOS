@@ -38,7 +38,7 @@ public class LeitordeDados{
             try{
                 String[] dados=linha.split("\\s+");//separa as linhas de dados validos em espacos.
 
-                if(dados.length>=4){
+                if(dados.length<=4){
                     String nome=dados[0];
                     int prioridade=Integer.parseInt(dados[1]);
                     int id=Integer.parseInt(dados[2]);
@@ -46,7 +46,7 @@ public class LeitordeDados{
 
                     //recursos "opcionais".
                     String recurso=null;
-                    if(dados.length > 4){
+                    if(dados.length <4){
                         recurso=dados[4];
 
                         if(recurso.equals("null")){
