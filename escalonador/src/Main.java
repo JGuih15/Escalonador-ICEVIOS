@@ -2,6 +2,7 @@ import java.io.File;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
 
+
 public class Main {
     public static void main(String[] arquivo) {
         // Verifica se o nome do arquivo foi fornecido como argumento de linha de comando.
@@ -12,6 +13,15 @@ public class Main {
 
         String nomeArquivo = arquivo[0];
       scheduler scheduler = new scheduler();
+
+        File pasta = new File("processos.txt"); // Ou o caminho completo
+        if (pasta.exists()) {
+            System.out.println("Arquivo encontrado! Tentando ler...");
+            // Sua chamada para o método leituraTXT
+        } else {
+            System.err.println("Erro: Arquivo não encontrado no caminho especificado.");
+
+        }
 
         try (Scanner scanner = new Scanner(new File(nomeArquivo))) {
             while (scanner.hasNextLine()) {
@@ -46,4 +56,5 @@ public class Main {
         System.out.println("Processos carregados com sucesso. Iniciando simulação...");
         scheduler.Executar(); // Chama o metodo para iniciar a simulação completa.
     }
+
 }
