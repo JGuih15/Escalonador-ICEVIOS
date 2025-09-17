@@ -4,11 +4,10 @@ public class Listacircular {
     private Node cabeca;
     Processos processo;
 
-
     public int getTamanho() {return tamanho;}
 
     public Listacircular() {
-        this.atual=null;
+        this.atual=cabeca ;
         this.tamanho=0;
     }
     public void addProcessoLC(Processos processo) {
@@ -45,7 +44,24 @@ public class Listacircular {
         return null;
     }
 
-    public void listar(){
-        cabeca=cabeca.next;
+    public String proximoElemento() {
+        if (atual == null) return null;
+        String valor = atual.processos.toString();
+        atual = atual.next;
+        return valor;
+    }
+    public void mostrar() {
+        Node atual = cabeca;
+        if (atual == null) {
+            System.out.println("Não tem processos!");
+            return;
+        }
+
+        System.out.print("Processos: ");
+        while (atual != null && atual.next != cabeca) {
+            System.out.print(atual.processos.toString() + " ");
+            atual = atual.next;
+        }
+        System.out.println();
     }
 }

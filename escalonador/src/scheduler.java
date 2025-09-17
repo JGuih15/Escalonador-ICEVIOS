@@ -1,242 +1,87 @@
 import java.io.IOException;
+import java.sql.SQLOutput;
+import java.util.Scanner;
+
 public class scheduler{
-    private ListaDupla AltaPrioridade;
-    private ListaDupla MediaPrioridade;
-    private ListaDupla BaixaPrioridade;
-    private ListaDupla Bloqqueados;
-    private Listacircular Execucao;
-    private  int ciclosAlta;
-    private int ciclos;
+    private scheduler prioridade;
+    public Listacircular altaPrioridade = new Listacircular();
+    public Listacircular mediaPrioridade = new Listacircular();
+    public Listacircular baixaPrioridade = new Listacircular();
+    public Listacircular todos = new Listacircular();
 
     public scheduler(){
-        this.AltaPrioridade= new ListaDupla();
-        this.MediaPrioridade= new ListaDupla();
-        this.BaixaPrioridade=new ListaDupla();
-        this.Execucao= new Listacircular();
-        this.ciclosAlta=0;
-        this.ciclos=0;
+        this.prioridade=new scheduler();
     }
 
-    //metodo para adicionar processos na fila de prioridade.
+    public scheduler getAltaPrioridade() {return prioridade;}
+    public void setAltaPrioridade(scheduler prioridade) {this.prioridade = prioridade;}
 
-    public void adicionar(Processos processo){
-        switch (processo.getPrioridade()){
-            case 1:
-                AltaPrioridade.addInicioDC(processo);
-                break;
-            case 2:
-                MediaPrioridade.addInicioDC(processo);
-                break;
-            case 3:
-                BaixaPrioridade.addInicioDC(processo);
-                break;
+    public scheduler getMediaPrioridade() {return prioridade;}
+    public void setMediaPrioridade(scheduler prioridade) {this.prioridade = prioridade;}
+
+    public scheduler getBaixaPrioridade() {return prioridade;}
+    public void setBaixaPrioridade(scheduler prioridade) {this.prioridade = prioridade;}
+
+    //analisar os dados e separar por meio da casse prioridade.
+    public void leitura(String arquivo) throws IOException{
+        Processos[] processos= LeitordeDados.leituraTXT(arquivo);
+        for(Processos p: processos){
+           if(p==null) continue;
+          else if (p==1){
+              altaPrioridade.addProcessoLC(p);
+              todos.addProcessoLC(p);
+           }
+           else if (p==2){
+               mediaPrioridade.addProcessoLC(p);
+               todos.addProcessoLC();
+           }
+           else if (p==3){
+               baixaPrioridade.addProcessoLC(p);
+               todos.addProcessoLC(p);
+           }else return;
         }
     }
+    public void executarCiclo(){
+        while(true){
+            int contadorAlta = 0;
+            if(contadorAlta<5){
+                System.out.println("processo de prioridade 1:");
+                System.out.println(altaPrioridade.toString());
+                altaPrioridade.proximoElemento();
+                contadorAlta++;
+            }else {
+                System.out.println("processo de prioridade 2:");
+                System.out.println(mediaPrioridade.toString());
+                System.out.println("processo de prioridade 3:");
+                System.out.println(baixaPrioridade.toString());
 
-    //metodo para mover para lista de execucao.
-    public void Executar(){
-        if(ciclosAlta>=5){//previnir inanicao de processos
-            if(MediaPrioridade.getTamanho()>0){//verifica a quantidade de processos adicionados na lista media.
-               Processos processo= MediaPrioridade.removerInicioDC().processos;
-               Execucao.addProcessoLC(processo);
-
-            } else if (BaixaPrioridade.getTamanho()>0) {
-                Processos processo=BaixaPrioridade.removerInicioDC().processos;
-                Execucao.addProcessoLC(processo);
+                contadorAlta = 0;
             }
-            ciclosAlta=0;
-
-        }else{
-            if (AltaPrioridade.getTamanho() > 0) {
-                Processos processo = AltaPrioridade.removerInicioDC().processos;
-                Execucao.addProcessoLC(processo);
-                ciclosAlta++;
-
-            } else if (MediaPrioridade.getTamanho() > 0) {
-                Processos processo = MediaPrioridade.removerInicioDC().processos;
-                Execucao.addProcessoLC(processo);
-
-            } else if (BaixaPrioridade.getTamanho() > 0) {
-                Processos processo = BaixaPrioridade.removerInicioDC().processos;
-                Execucao.addProcessoLC(processo);
-            }
-        }
-
-    }
-
-    public void Escalonar(){
-        if(Execucao == null){
-            System.out.println("sem processos para executar aqui");
-            return;
-        }
-
-        Processos processo = Execucao.processo;
-
-        if(processo == null){
-            System.out.println("Erro ao obter processo da fila");
-            return;
-        }
-
-        System.out.println("Executando processo: " + processo.getNome() +
-                " (ID: " + processo.getId() +
-                ", Ciclos restantes: " + processo.getCiclos() + ")");
-
-        // Quantum fixo de 3
-        int quantum = 3;
-        int ciclosParaExecutar = Math.min(quantum, processo.getCiclos());
-
-        for(int i = 0; i < ciclosParaExecutar; i++){
-            System.out.println("Tempo " + ciclos + ": Executando " + processo.getNome());
-            ciclos++;
-            processo.setCiclos(processo.getCiclos() - 1);
-
-            // Simular bloqueio se tem recurso
-            if(Math.random() < 0.2 && processo.getRecursos() != null && !processo.getRecursos().equals("null")){
-                System.out.println("Processo " + processo.getNome() + " BLOQUEADO esperando recurso: " + processo.getRecursos());
-                processo.setBloqueado(true);
-                Execucao.removerProcessoLC(processo);
-                Bloqqueados.addFinalDC(processo);
-                return;
-            }
-        }
-
-        if(processo.getCiclos() <= 0){
-            System.out.println("Processo " + processo.getNome() + " TERMINADO no tempo " + ciclos);
-            Execucao.removerProcessoLC(processo);
+            mediaPrioridade.proximoElemento();
+            baixaPrioridade.proximoElemento();
         }
     }
 
-    public void desbloquearProcessos(){
-        if(Bloqqueados.isEmpty()) return;
 
-        if(Math.random() < 0.4){
-            Node desbloqueado = Bloqqueados.removerInicioDC();
-            if(desbloqueado != null){
-                Processos processo = desbloqueado.processos;
-                processo.setBloqueado(false);
-                System.out.println("Processo " + processo.getNome() + " DESBLOQUEADO");
-                adicionar(processo);
-            }
+    public void executar(){
+        System.out.println("alta prioridade: "+prioridade.getAltaPrioridade());
+        System.out.println("meida prioridade: "+prioridade.getMediaPrioridade());
+        System.out.println("Baixa prioridade: "+prioridade.getBaixaPrioridade());
+    }
+
+    private void executarFila(String nomeFila, gerenciamento fila) {
+        System.out.println("---- " + nomeFila + " ----");
+        while (!fila.isEmpty()) {
+            Processos p = fila.removerUltima();
+            System.out.println("Executando: " + p.getNome() +
+                    " | Prioridade: " + p.getPrioridade() +
+                    " | Ciclos: " + p.getCiclos());
+
         }
     }
 
-    public void executarFila(){
-        System.out.println("\n========== INICIANDO EXECUCAO DO ESCALONADOR ==========");
 
-        int ciclosMaximos = 100;
-        int ciclosExecutados = 0;
 
-        while(ciclosExecutados < ciclosMaximos && existemProcessos()){
-            System.out.println("\n--- CICLO " + (ciclosExecutados + 1) + " ---");
 
-            desbloquearProcessos();
 
-            if(Execucao.getTamanho() == 0){
-                Executar();
-            }
-
-            if(Execucao.getTamanho() > 0){
-                Escalonar();
-            }
-
-            if((ciclosExecutados + 1) % 5 == 0){
-                exibirEstadoFilas();
-            }
-
-            ciclosExecutados++;
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
-
-        System.out.println("\n========== EXECUCAO FINALIZADA ==========");
-        System.out.println("Ciclos executados: " + ciclosExecutados);
-        System.out.println("Tempo total: " + ciclos);
-
-        exibirRelatorioFinal();
-    }
-
-    public boolean existemProcessos(){
-        return !AltaPrioridade.isEmpty() ||
-                !MediaPrioridade.isEmpty() ||
-                !BaixaPrioridade.isEmpty() ||
-                Execucao.getTamanho() > 0 ||
-                !Bloqqueados.isEmpty();
-    }
-
-    public void exibirEstadoFilas(){
-        System.out.println("\n=== ESTADO ATUAL DAS FILAS ===");
-        System.out.println("Alta Prioridade: " + AltaPrioridade.getTamanho() + " processos");
-        System.out.println("Media Prioridade: " + MediaPrioridade.getTamanho() + " processos");
-        System.out.println("Baixa Prioridade: " + BaixaPrioridade.getTamanho() + " processos");
-        System.out.println("Em Execucao: " + Execucao.getTamanho() + " processos");
-        System.out.println("Bloqueados: " + Bloqqueados.getTamanho() + " processos");
-        System.out.println("Ciclos de Alta Prioridade: " + ciclosAlta);
-        System.out.println("Tempo Atual: " + ciclos);
-    }
-
-    public void exibirRelatorioFinal(){
-        System.out.println("\n=== RELATORIO FINAL ===");
-
-        if(!AltaPrioridade.isEmpty()){
-            System.out.println("Processos nao executados (Alta Prioridade):");
-            AltaPrioridade.listarDC();
-        }
-
-        if(!MediaPrioridade.isEmpty()){
-            System.out.println("Processos nao executados (Media Prioridade):");
-            MediaPrioridade.listarDC();
-        }
-
-        if(!BaixaPrioridade.isEmpty()){
-            System.out.println("Processos nao executados (Baixa Prioridade):");
-            BaixaPrioridade.listarDC();
-        }
-
-        if(!Bloqqueados.isEmpty()){
-            System.out.println("Processos ainda bloqueados:");
-            Bloqqueados.listarDC();
-        }
-
-        System.out.println("\nEstatisticas:");
-        System.out.println("Total de ciclos: " + ciclos);
-        System.out.println("Ciclos de alta prioridade: " + ciclosAlta);
-    }
-
-    public void leitura(String caminho) throws IOException {
-        System.out.println("=== CARREGANDO PROCESSOS DO ARQUIVO ===");
-        Processos[] processos = LeitordeDados.leituraTXT(caminho);
-
-        for (Processos processo : processos) {
-            if (processo != null) {
-                adicionar(processo);
-                System.out.println("Processo adicionado: " + processo);
-            }
-        }
-
-        System.out.println("\n=== ESTADO INICIAL DAS FILAS ===");
-        exibirEstadoFilas();
-    }
-
-    public void adicionarProcessoEmTempo(Processos processo){
-        System.out.println("Adicionando processo em tempo real: " + processo.getNome());
-        adicionar(processo);
-    }
-
-    public void resetarEscalonador(){
-        AltaPrioridade = new ListaDupla();
-        MediaPrioridade = new ListaDupla();
-        BaixaPrioridade = new ListaDupla();
-        Bloqqueados = new ListaDupla();
-        Execucao = new Listacircular();
-
-        ciclosAlta = 0;
-        ciclos = 0;
-
-        System.out.println("ESCALONADOR RESETADO");
-    }
-
-  }
+}
