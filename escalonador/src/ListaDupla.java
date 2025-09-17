@@ -87,7 +87,9 @@ public class ListaDupla {
         }
     }
 
-
+    public Boolean isEmpty(){
+        return (head == null);
+    }
 
 
 }

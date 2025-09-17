@@ -2,10 +2,8 @@ import java.io.File;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
 
-
 public class Main {
     public static void main(String[] arquivo) {
-        Listacircular todos = todos;
         // Verifica se o nome do arquivo foi fornecido como argumento de linha de comando.
         if (arquivo.length == 0) {
             System.err.println("Erro: Por favor, forneça o nome do arquivo de dados como argumento.");
@@ -13,15 +11,7 @@ public class Main {
         }
 
         String nomeArquivo = arquivo[0];
-      scheduler scheduler = new scheduler();
-
-        File pasta = new File("processos.txt"); // Ou o caminho completo
-        if (pasta.exists()) {
-            System.out.println("Arquivo encontrado! Tentando ler...");
-            // Sua chamada para o método leituraTXT
-        } else {
-            System.err.println("Erro: Arquivo não encontrado no caminho especificado.");
-        }
+        scheduler scheduler = new scheduler();
 
         try (Scanner scanner = new Scanner(new File(nomeArquivo))) {
             while (scanner.hasNextLine()) {
@@ -43,7 +33,7 @@ public class Main {
                         recursoNecessario = dados[4].trim();
                     }
 
-                    Processos processo = new Processos(nome,prioridade,id, ciclosNecessarios,recursoNecessario);
+                    Processos processo = new Processos(nome, prioridade, id, ciclosNecessarios, recursoNecessario);
                     scheduler.executarFila(); // Adiciona o processo ao escalonador.
                 } catch (NumberFormatException e) {
                     System.err.println("Erro de formato de número na linha: " + linha);
@@ -55,23 +45,17 @@ public class Main {
         }
         System.out.println("Processos carregados com sucesso. Iniciando simulação...");
 
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Digite o que você deseja fazer:");
-        System.out.println("1 - ver lista de processos completos");
-        System.out.println("2 - ver lista de ciclos de processos completos");
-        System.out.println("3 - ver ciclo");
+        scheduler escalonador = new scheduler();
 
-        while (true) {
-            int opcao = sc.nextInt();
-            switch (opcao) {
-                case 1:
-                    todos.mostrar();
-
-                case 2:
-
-                case 3:
+        for (int i = 0; i < 10; i++) {
+            System.out.println("Aperte qualquer tecla para prosseguir ou 0 para sair");
+            Scanner scanner = new Scanner(System.in);
+            int n = scanner.nextInt();
+            if( n = 0) break;
+            else{
+                System.out.println("\n--- CICLO " + (i + 1) + " ---");
+                escalonador.executarCiclo();
             }
         }
     }
-
 }

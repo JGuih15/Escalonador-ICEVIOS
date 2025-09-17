@@ -80,6 +80,14 @@ public class scheduler{
         }
     }
 
+    public boolean pendentes(){
+       return   !altaPrioridade.isEmpty();
+                !mediaPrioridade.isEmpty();
+                !baixaPrioridade.isEmpty();
+                !bloqueados.isEmpty();
+
+    }
+
 
 
 
