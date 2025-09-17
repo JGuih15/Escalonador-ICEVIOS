@@ -4,6 +4,9 @@ public class Listacircular {
     private Node cabeca;
     Processos processo;
 
+
+    public int getTamanho() {return tamanho;}
+
     public Listacircular() {
         this.atual=null;
         this.tamanho=0;
@@ -40,5 +43,9 @@ public class Listacircular {
         }
         tamanho--;
         return null;
+    }
+
+    public void listar(){
+        cabeca=cabeca.next;
     }
 }
