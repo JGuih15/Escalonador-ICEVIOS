@@ -2,13 +2,14 @@ public class Listacircular {
     private Node atual;
     private int tamanho;
     private Node cabeca;
+    Processos processo;
 
-    public Listacircular(Processos processo) {
+    public Listacircular() {
         this.atual=null;
         this.tamanho=0;
     }
     public void addProcessoLC(Processos processo) {
-        Node novoNo = new Node();
+        Node novoNo = new Node(processo);
         if (atual == null) {
             atual = novoNo;
             novoNo.next = atual;

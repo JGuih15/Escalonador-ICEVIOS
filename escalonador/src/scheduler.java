@@ -1,54 +1,77 @@
 import java.io.IOException;
-import java.sql.SQLOutput;
 public class scheduler{
-    private Prioridade prioridade;
+    private ListaDupla AltaPrioridade;
+    private ListaDupla MediaPrioridade;
+    private ListaDupla BaixaPrioridade;
+    private ListaDupla Bloqqueados;
+    private Listacircular Execucao;
+    private  int ciclosAlta;
+    private int ciclos;
 
     public scheduler(){
-        this.prioridade=new Prioridade();
+        this.AltaPrioridade= new ListaDupla();
+        this.MediaPrioridade= new ListaDupla();
+        this.BaixaPrioridade=new ListaDupla();
+        this.Execucao= new Listacircular();
+        this.ciclosAlta=0;
+        this.ciclos=0;
     }
 
-    //analisar os dados e separar por meio da casse prioridade.
-    public void leitura(String arquivo) throws IOException{
-        Processos[] processos= LeitordeDados.leituraTXT(arquivo);
-        for(Processos p: processos){
-           if(p==null) continue;
+    //metodo para adicionar processos na fila de prioridade.
 
-           switch (p.getPrioridade()){
-               case 1:
-                   prioridade.getAltaPrioridade().adicionarNO(p);
-                   break;
-               case 2:
-                   prioridade.getMediaPrioridade().adicionarNO(p);
-                   break;
-               case 3:
-                   prioridade.getBaixaPrioridade().adicionarNO(p);
-                   break;
-               default:
-                   System.out.println("processo"+p.getNome()+"invalido");
+    public void adicionar(Processos processo){
+        switch (processo.getPrioridade()){
+            case 1:
+                AltaPrioridade.addInicioDC(processo);
+                break;
+            case 2:
+                MediaPrioridade.addInicioDC(processo);
+                break;
+            case 3:
+                BaixaPrioridade.addInicioDC(processo);
+                break;
+        }
+    }
 
-           }
+    //metodo para mover para lista de execucao.
+    public void Executar(){
+        if(ciclosAlta>=5){//previnir inanicao de processos
+            if(MediaPrioridade.getTamanho()>0){//verifica a quantidade de processos adicionados na lista media.
+               Processos processo= MediaPrioridade.removerInicioDC().processos;
+               Execucao.addProcessoLC(processo);
 
+            } else if (BaixaPrioridade.getTamanho()>0) {
+                Processos processo=BaixaPrioridade.removerInicioDC().processos;
+                Execucao.addProcessoLC(processo);
+            }
+            ciclosAlta=0;
+
+        }else{
+            if (AltaPrioridade.getTamanho() > 0) {
+                Processos processo = AltaPrioridade.removerInicioDC().processos;
+                Execucao.addProcessoLC(processo);
+                ciclosAlta++;
+
+            } else if (MediaPrioridade.getTamanho() > 0) {
+                Processos processo = MediaPrioridade.removerInicioDC().processos;
+                Execucao.addProcessoLC(processo);
+
+            } else if (BaixaPrioridade.getTamanho() > 0) {
+                Processos processo = BaixaPrioridade.removerInicioDC().processos;
+                Execucao.addProcessoLC(processo);
+            }
         }
 
     }
 
-    public void executar(){
-        System.out.println("alta prioridade: "+prioridade.getAltaPrioridade());
-        System.out.println("meida prioridade: "+prioridade.getMediaPrioridade());
-        System.out.println("Baixa prioridade: "+prioridade.getBaixaPrioridade());
-    }
-
-    private  void executarFila(String nomeFila, gerenciamento fila) {
-        System.out.println("---- " + nomeFila + " ----");
-        while (!fila.isEmpty()) {
-            Processos p = fila.removerUltima();
-            System.out.println("Executando: " + p.getNome() +
-                    " | Prioridade: " + p.getPrioridade() +
-                    " | Ciclos: " + p.getCiclos());
-
+    public void Escalonar(){
+        if(Execucao==null){
+            System.out.println("sem processos para executar aqui");
+            return;
         }
+        Processos processo= Execucao
+
+
     }
-
-
 
 }

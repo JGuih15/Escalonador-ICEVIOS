@@ -14,7 +14,7 @@ public class Main {
             s.leitura(caminho);
 
             // 2. Executar os processos organizados por prioridade
-            s.executar();
+            s.executarFila();
 
         } catch (IOException e) {
             System.out.println("Erro ao ler o arquivo: " + e.getMessage());
