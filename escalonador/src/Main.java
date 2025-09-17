@@ -1,23 +1,49 @@
-import java.io.IOException;
+import java.io.File;
+import java.util.Scanner;
+import java.io.FileNotFoundException;
 
 public class Main {
-    public static void main(String[] args) {
-        // Criar o escalonador
-        scheduler s = new scheduler();
-
-        try {
-            // Caminho do arquivo com os processos
-            // Você pode alterar para um caminho absoluto se preferir
-            String caminho = "processos.txt";
-
-            // 1. Carregar os processos no escalonador
-            s.leitura(caminho);
-
-            // 2. Executar os processos organizados por prioridade
-            s.executarFila();
-
-        } catch (IOException e) {
-            System.out.println("Erro ao ler o arquivo: " + e.getMessage());
+    public static void main(String[] arquivo) {
+        // Verifica se o nome do arquivo foi fornecido como argumento de linha de comando.
+        if (arquivo.length == 0) {
+            System.err.println("Erro: Por favor, forneça o nome do arquivo de dados como argumento.");
+            return; // Encerra o programa se nenhum argumento for fornecido.
         }
+
+        String nomeArquivo = arquivo[0];
+      scheduler scheduler = new scheduler();
+
+        try (Scanner scanner = new Scanner(new File(nomeArquivo))) {
+            while (scanner.hasNextLine()) {
+                String linha = scanner.nextLine();
+                String[] dados = linha.split(",");
+
+                if (dados.length < 4) {
+                    System.err.println("Aviso: Linha ignorada devido a formato incorreto: " + linha);
+                    continue; // Pula para a próxima linha se não houver dados suficientes.
+                }
+
+                try {
+                    int id = Integer.parseInt(dados[0].trim());
+                    String nome = dados[1].trim();
+                    int prioridade = Integer.parseInt(dados[2].trim());
+                    int ciclosNecessarios = Integer.parseInt(dados[3].trim());
+                    String recursoNecessario = null;
+                    if (dados.length > 4) {
+                        recursoNecessario = dados[4].trim();
+                    }
+
+                    Processos processo = new Processos(nome,prioridade,id, ciclosNecessarios,recursoNecessario);
+                    scheduler.executarFila(); // Adiciona o processo ao escalonador.
+                } catch (NumberFormatException e) {
+                    System.err.println("Erro de formato de número na linha: " + linha);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Arquivo '" + nomeArquivo + "' não encontrado.");
+            return;
+        }
+        System.out.println("Processos carregados com sucesso. Iniciando simulação...");
+        scheduler.Executar(); // Chama o metodo para iniciar a simulação completa.
     }
 }
