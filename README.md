@@ -2,53 +2,73 @@
 
 # Escalonador-ICEVIOS
 
-Um simulador de escalonador de processos implementado em Java que utiliza um sistema de filas multicamadas com prioridades e controle de recursos.
+# Escalonador-ICEVIOS
 
-## 📋 Requisitos
+**Disciplina:** Sistemas Operacionais  
+**Tipo:** Trabalho Prático  
+**Instituição:** Instituto de Ciência, Educação e Vida (ICEV)  
 
-### Requisitos de Sistema
-- **Java JDK 8** ou superior
-- Sistema operacional: Windows, Linux ou macOS
-- Mínimo de **512 MB** de RAM disponível
-- Espaço em disco: aproximadamente **50 MB**
+## Objetivo
 
-### Estrutura de Arquivos Necessária
+Implementar um simulador de escalonador de processos em Java que utiliza um sistema de filas multicamadas com prioridades e controle de recursos, aplicando os conceitos fundamentais de sistemas operacionais relacionados ao gerenciamento de processos.
+
+## Descrição do Sistema
+
+O Escalonador-ICEVIOS é um simulador que gerencia processos através de:
+- Sistema de filas multicamadas por prioridade
+- Controle de recursos (CPU, Disco, Impressora, Rede)
+- Algoritmo Round-Robin com prevenção de starvation
+- Bloqueio e desbloqueio automático de processos
+
+## Estrutura do Projeto
+
 ```
 escalonador/
 ├── src/
-│   ├── Main.java
-│   ├── scheduler.java
-│   ├── Processos.java
-│   ├── ListaDupla.java
-│   ├── Listacircular.java
-│   ├── Node.java
-│   └── LeitordeDados.java
-└── processos.txt
+│   ├── Main.java              # Classe principal do sistema
+│   ├── scheduler.java         # Implementação do escalonador
+│   ├── Processos.java         # Modelo de dados dos processos
+│   ├── ListaDupla.java        # Estrutura de dados - lista duplamente ligada
+│   ├── Listacircular.java     # Estrutura de dados - lista circular
+│   ├── Node.java              # Nó para as estruturas de dados
+│   └── LeitordeDados.java     # Leitor de arquivo de processos (não utilizado)
+└── processos.txt              # Arquivo de configuração dos processos
 ```
 
-## 🚀 Como Utilizar o Escalonador
+## Requisitos Técnicos
+
+### Ambiente de Desenvolvimento
+- Java JDK 8 ou superior
+- Sistema operacional: Windows, Linux ou macOS
+- Memória RAM: mínimo 512 MB disponível
+- Espaço em disco: 50 MB
+
+### Dependências
+- Nenhuma dependência externa necessária
+- Utiliza apenas bibliotecas padrão do Java
+
+## Configuração e Execução
 
 ### 1. Preparação do Ambiente
 ```bash
-# Clone ou baixe o projeto
-git clone [URL-DO-REPOSITORIO]
-cd Escalonador-ICEVIOS/escalonador
+# Navegue até o diretório do projeto
+cd escalonador/src
 ```
 
-### 2. Configuração do Arquivo de Processos
-Edite o arquivo `processos.txt` seguindo o formato:
+### 2. Configuração dos Processos
+Edite o arquivo `processos.txt` seguindo a estrutura:
 ```
 Nome Prioridade ID Ciclos Recurso
 ```
 
-**Parâmetros:**
-- **Nome**: Identificador do processo (sem espaços)
-- **Prioridade**: 1 (alta), 2 (média), 3 (baixa)
-- **ID**: Número de identificação único
-- **Ciclos**: Quantidade de tempo de execução necessário
-- **Recurso**: CPU, Disco, Impressora, Rede, ou 'null' se nenhum recurso for necessário
+**Especificação dos Parâmetros:**
+- **Nome**: Identificador alfanumérico do processo (sem espaços)
+- **Prioridade**: Valor numérico (1=alta, 2=média, 3=baixa)
+- **ID**: Identificador numérico único do processo
+- **Ciclos**: Quantidade de ciclos de execução necessários
+- **Recurso**: Tipo de recurso (CPU, Disco, Impressora, Rede) ou 'null'
 
-**Exemplo de arquivo `processos.txt`:**
+**Exemplo de configuração:**
 ```
 ProcessoA 1 101 5 CPU
 ProcessoB 2 102 8 Disco
@@ -59,97 +79,121 @@ ProcessoE 1 105 10 null
 
 ### 3. Compilação
 ```bash
-# Navegue até o diretório src
-cd src
-
-# Compile todos os arquivos Java
 javac *.java
 ```
 
 ### 4. Execução
 ```bash
-# Execute o programa principal
 java Main
 ```
 
-## 🔧 Funcionalidades
+## Algoritmo de Escalonamento
 
-### Sistema de Prioridades
-- **Alta Prioridade (1)**: Processos críticos executados primeiro
-- **Média Prioridade (2)**: Processos padrão
-- **Baixa Prioridade (3)**: Processos menos importantes
+### Características Principais
+1. **Filas Multicamadas**: Três níveis de prioridade (alta, média, baixa)
+2. **Round-Robin**: Execução circular dos processos na fila de execução
+3. **Prevenção de Starvation**: Após 5 processos de alta prioridade, executa um de média/baixa
+4. **Controle de Recursos**: Processos com recursos específicos são bloqueados temporariamente
+5. **Desbloqueio Periódico**: Processos bloqueados retornam às filas de prioridade
+
+### Fluxo de Execução
+```
+Processos Novos → Filas de Prioridade → Lista de Execução → Conclusão
+                      ↓
+                Fila de Bloqueados ←→ Desbloqueio Periódico
+```
+
+## Funcionalidades Implementadas
+
+### Gerenciamento de Filas
+- Fila de alta prioridade (ListaDupla)
+- Fila de média prioridade (ListaDupla)  
+- Fila de baixa prioridade (ListaDupla)
+- Fila de processos bloqueados (ListaDupla)
+- Lista de execução circular (Listacircular)
 
 ### Controle de Recursos
-- **CPU**: Processamento geral
-- **Disco**: Operações de I/O em disco
+- **CPU**: Processamento computacional
+- **Disco**: Operações de entrada/saída
 - **Impressora**: Operações de impressão
 - **Rede**: Comunicação de rede
-- **null**: Nenhum recurso específico necessário
+- **null**: Sem recurso específico
 
-### Algoritmo de Escalonamento
-1. **Round-Robin** com quantum para lista de execução
-2. **Controle de Starvation**: Após 5 processos de alta prioridade, um de média/baixa é executado
-3. **Bloqueio por Recursos**: Processos que necessitam recursos específicos são temporariamente bloqueados
-4. **Desbloqueio Automático**: Processos bloqueados são periodicamente movidos de volta às filas de prioridade
+### Monitoramento em Tempo Real
+- Estado atual de todas as filas
+- Processo em execução
+- Contador de ciclos totais
+- Estatísticas de finalização
 
-## 📊 Saída do Sistema
+## Saída do Sistema
 
-O escalonador exibe em tempo real:
-- Estado de todas as filas (alta, média, baixa prioridade)
-- Lista de processos bloqueados
-- Lista de execução atual
-- Número de ciclos executados
-- Estatísticas finais de execução
-
-## ⚙️ Personalização
-
-### Modificar Quantum de Tempo
-No arquivo `scheduler.java`, altere a constante na linha que controla o contador:
-```java
-if (contadorAlta >= 5) // Altere o valor 5 para o quantum desejado
+O sistema exibe periodicamente:
+```
+--- ESTADO DO SISTEMA ---
+Alta prioridade: [lista de processos]
+Media prioridade: [lista de processos]
+Baixa prioridade: [lista de processos]
+Bloqueados: [lista de processos]
+Execução: [processo atual]
+Ciclos executados: [número]
+----------------------------
 ```
 
-### Adicionar Novos Tipos de Recursos
-1. Modifique o arquivo `processos.txt` com o novo recurso
-2. Ajuste a lógica de bloqueio em `scheduler.java` se necessário
+## Personalização
 
-## 🐛 Solução de Problemas
+### Modificar Quantum
+Altere a constante no arquivo `scheduler.java`:
+```java
+if (contadorAlta >= 5) // Modificar valor do quantum
+```
 
-### Erro: "Arquivo não encontrado"
-- Verifique se o arquivo `processos.txt` está no diretório correto
-- Certifique-se de que o nome do arquivo está correto
+### Adicionar Recursos
+1. Inclua o novo recurso no arquivo `processos.txt`
+2. Ajuste a lógica de bloqueio se necessário
 
-### Erro: "NumberFormatException"
-- Verifique se todos os valores numéricos no arquivo estão corretos
-- Confirme se não há caracteres especiais nos campos numéricos
+## Resolução de Problemas
 
-### Processo não executando
-- Verifique se a prioridade está entre 1-3
-- Confirme se o número de ciclos é maior que 0
+### Erro: Arquivo não encontrado
+- Verifique se `processos.txt` está no diretório correto
+- Confirme a nomenclatura exata do arquivo
 
-## 📝 Exemplo de Uso Completo
+### Erro: Formato de dados inválido
+- Verifique se todos os campos estão preenchidos corretamente
+- Confirme se valores numéricos não contêm caracteres especiais
+
+### Processo não executa
+- Prioridade deve estar entre 1-3
+- Ciclos devem ser maior que zero
+
+## Exemplo de Uso Completo
 
 ```bash
-# 1. Prepare o arquivo processos.txt
-echo "ProcessoA 1 101 5 CPU" > processos.txt
-echo "ProcessoB 2 102 3 null" >> processos.txt
+# 1. Preparar arquivo de processos
+echo "TesteA 1 001 3 CPU" > processos.txt
+echo "TesteB 2 002 5 null" >> processos.txt
 
-# 2. Compile o projeto
-cd src
+# 2. Compilar
 javac *.java
 
-# 3. Execute
+# 3. Executar
 java Main
 ```
 
-## 👥 Contribuidores
+## Desenvolvimento
 
-Este projeto foi desenvolvido por:
+### Contribuidores
 - **Gustavo**
-- **João Guilherme**
+- **João Guilherme Ribeiro Rocha da Cunha**
 - **Luis Gabriel**
 
-## 📄 Licença
+### Estrutura de Classes
+- `Main`: Ponto de entrada e carregamento de processos
+- `scheduler`: Lógica principal do escalonamento
+- `Processos`: Modelo de dados dos processos
+- `ListaDupla`: Implementação de lista duplamente ligada
+- `Listacircular`: Implementação de lista circular
+- `Node`: Estrutura de nó para as listas
 
-Este projeto está sob licença ICEV. Veja o arquivo LICENSE para mais detalhes.
+## Licença
 
+Este projeto está sob licença ICEV.
