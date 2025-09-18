@@ -1,67 +1,60 @@
 public class Listacircular {
+    private Node cabeca;
     private Node atual;
     private int tamanho;
-    private Node cabeca;
-    Processos processo;
-
-    public int getTamanho() {return tamanho;}
 
     public Listacircular() {
-        this.atual=cabeca ;
-        this.tamanho=0;
+        cabeca = null;
+        atual = null;
+        tamanho = 0;
     }
-    public void addProcessoLC(Processos processo) {
-        Node novoNo = new Node(processo);
-        if (atual == null) {
-            atual = novoNo;
-            novoNo.next = atual;
-        }
-        else {
+
+    public boolean estaVazia() { return cabeca == null; }
+    public int getTamanho() { return tamanho; }
+
+    public void adicionarFim(Processos p) {
+        Node novo = new Node(p);
+        if (estaVazia()) {
+            cabeca = novo;
+            novo.next = cabeca;
+            atual = cabeca;
+        } else {
             Node temp = cabeca;
-            while (temp.next != cabeca) {
-                temp = temp.next;
-            }
-            temp.next = novoNo;
-            novoNo.next = cabeca;
+            while (temp.next != cabeca) temp = temp.next;
+            temp.next = novo;
+            novo.next = cabeca;
         }
         tamanho++;
     }
-    public Object removerProcessoLC(Processos processos) {
-        if  (atual == null) return null;
 
-        else if (atual.next == cabeca) {
-            processos = atual.processos;
-            return null;
-        }else{
-            Node temp = cabeca;
-            while (temp.next != atual) {
-                temp = temp.next;
-            }
-            temp.next = cabeca.next;
-            cabeca = temp.next;
-        }
-        tamanho--;
-        return null;
-    }
+    public Processos getAtual() { return (atual != null) ? atual.processo : null; }
 
-    public String proximoElemento() {
-        if (atual == null) return null;
-        String valor = atual.processos.toString();
-        atual = atual.next;
-        return valor;
-    }
-    public void mostrar() {
-        Node atual = cabeca;
-        if (atual == null) {
-            System.out.println("Não tem processos!");
-            return;
-        }
+    public void removerAtual() {
+        if (estaVazia()) return;
 
-        System.out.print("Processos: ");
-        while (atual != null && atual.next != cabeca) {
-            System.out.print(atual.processos.toString() + " ");
+        if (atual == cabeca && atual.next == cabeca) {
+            cabeca = atual = null;
+        } else {
+            Node prev = cabeca;
+            while (prev.next != atual) prev = prev.next;
+            prev.next = atual.next;
+            if (atual == cabeca) cabeca = atual.next;
             atual = atual.next;
         }
-        System.out.println();
+        tamanho--;
+    }
+
+    public void avancar() { if (atual != null) atual = atual.next; }
+
+    public void imprimirLista() {
+        if (estaVazia()) {
+            System.out.println("Lista circular vazia");
+            return;
+        }
+        Node temp = cabeca;
+        do {
+            System.out.println(temp.processo);
+            temp = temp.next;
+        } while (temp != cabeca);
     }
 }

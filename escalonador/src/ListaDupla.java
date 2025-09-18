@@ -1,93 +1,47 @@
 public class ListaDupla {
-    private Node  head;
+    private Node head;
     private Node tail;
     private int tamanho;
 
-    public int getTamanho() {return tamanho;}
-
-
-    public boolean isEmpty(){
-        if(head==null){
-            return true;
-        }
-        return false;
-    }
     public ListaDupla() {
         head = null;
         tail = null;
         tamanho = 0;
     }
-    //DC = duplamente encadeada
-    //adicionar no inicio da lista
-    public void addInicioDC(Processos p){
-        Node atual=head;
-        Node novoNo= new Node(p);
-        if(isEmpty()){
-            head=novoNo;
-        }
-        else{
-           novoNo.next=head;
-           head.anterior=novoNo;
-           novoNo.anterior=null;
 
-        }
-    }
-    //adiciona no final da lista.
-    public void addFinalDC(Processos p) {
-        Node novoDC = new Node(p);
-        if (head == null) { // Lista vazia
-            head = novoDC;
-            tail = novoDC;
+    public int getTamanho() { return tamanho; }
+    public boolean estaVazia() { return head == null; }
+
+    public void adicionarNoFinal(Processos p) {
+        Node novo = new Node(p);
+        if (estaVazia()) {
+            head = tail = novo;
         } else {
-            tail.next = novoDC;
-            novoDC.anterior = (Node) tail;
-            tail = novoDC;
+            tail.next = novo;
+            novo.anterior = tail;
+            tail = novo;
         }
         tamanho++;
     }
 
-    //remove o No sem perder a referencia
-    public Node removerInicioDC() {
-        Node atual;
-        if (head == null) return null;
-        Node removido = (Node) head;
-
+    public Processos removerDoInicio() {
+        if (estaVazia()) return null;
+        Node removido = head;
         head = head.next;
-        if (head != null) {
-            ((Node) head).anterior = null;
-        } else {
-            tail = null; // Lista ficou vazia
-        }
-
+        if (head != null) head.anterior = null;
+        else tail = null;
         removido.next = null;
         removido.anterior = null;
         tamanho--;
-        return removido;
+        return removido.processo;
     }
 
-    //remover ultimo.
-    public void removerUltimoDC(Node atual){
-        atual=head;
-        if(isEmpty()){
-            System.out.println("esssa lista esta vazia");
-        }else{
-            while(head.next.next!=null){
-                head=atual.next;
-            }
-            atual.next=null;
-            tamanho--;
-        }
-    }
-    public void listarDC() {
-        Node atual = (Node) head;
+    public void imprimirLista() {
+        Node atual = head;
+        if (atual == null) System.out.println("Lista vazia");
         while (atual != null) {
-            System.out.println(atual.processos);
+            System.out.println(atual.processo);
             atual = atual.next;
-            System.out.println("TAMANHO: " + tamanho);
         }
     }
-
-
-
-
 }
