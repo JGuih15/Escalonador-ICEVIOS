@@ -95,7 +95,7 @@ public class scheduler {
                !listaExecucao.estaVazia();
     }
 
-    public void execucaoCompleta() {
+    public void execucao() {
         while (temProcesso()) {
             ciclos++;
             desbloquearProcesso();
