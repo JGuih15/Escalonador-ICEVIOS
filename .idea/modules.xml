@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Escalonador-ICEVIOS.iml" filepath="$PROJECT_DIR$/.idea/Escalonador-ICEVIOS.iml" />
-      <module fileurl="file://$PROJECT_DIR$/escalonador/escalonador.iml" filepath="$PROJECT_DIR$/escalonador/escalonador.iml" />
+      <module fileurl="file://$PROJECT_DIR$/escalonador.iml" filepath="$PROJECT_DIR$/escalonador.iml" />
     </modules>
   </component>
 </project>
